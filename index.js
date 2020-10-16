@@ -21,6 +21,7 @@ client.connect(err => {
   const orderCollection = client.db("creativeAgency").collection("order");
   const feedbackCollection = client.db("creativeAgency").collection("feedback");
   const serviceCollection = client.db("creativeAgency").collection("service");
+  const adminCollection = client.db("creativeAgency").collection("admin");
   app.post('/addOrder', (req, res) => {
       const order = req.body;
       console.log(order);
@@ -70,9 +71,19 @@ app.get('/service', (req, res) => {
 });
 
 
+
+app.post('/admin', (req, res) => {
+    const admin = req.body;
+    console.log(admin);
+    adminCollection.insertOne(admin)
+    .then(result => {
+        res.send(result.insertedCount > 0);
+    })
+});
+
     app.post('/isAdmin', (req, res) => {
         const email = req.body.email;
-        serviceCollection.find({email: email})
+        adminCollection.find({email: email})
         .toArray((err, admin) => {
             res.send(admin.length > 0)
         })
